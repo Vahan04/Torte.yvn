@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="hy">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Torte.yvn — Տորթեր պատվերով</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Armenian:wght@400;500;700&family=Noto+Serif+Armenian:wght@600;800&display=swap">
+<style>
+body{margin:0}
+/* Layout: berry hero band with a cake-order builder card, then menu grid, then order steps and contacts */
+:root{
+ --bg:#fff8f6; --surface:#ffffff; --ink:#3a1f24; --muted:#7d5f63; --line:#f0dcdc;
+ --berry:#b8326a; --berry-ink:#ffffff; --cocoa:#5a2d22; --cream:#fde7ec; --pistachio:#8fb06a;
+ --display:"Noto Serif Armenian",Georgia,serif; --body:"Noto Sans Armenian",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#1d1214; --surface:#2a1a1e; --ink:#fbe9ec; --muted:#c8a8ae; --line:#3d272c;
+ --berry:#e0588f; --berry-ink:#1d1214; --cocoa:#f2c9b8; --cream:#3a1f27; --pistachio:#a8c886; color-scheme:dark}}
+:root[data-theme="dark"]{
+ --bg:#1d1214; --surface:#2a1a1e; --ink:#fbe9ec; --muted:#c8a8ae; --line:#3d272c;
+ --berry:#e0588f; --berry-ink:#1d1214; --cocoa:#f2c9b8; --cream:#3a1f27; --pistachio:#a8c886; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
+.in{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+a{color:inherit}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+header .in{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px}
+.logo{font-family:var(--display);font-weight:800;font-size:24px;color:var(--berry);text-decoration:none}
+nav{display:flex;gap:20px;font-weight:500;font-size:15px}
+nav a{text-decoration:none;color:var(--muted)}
+.btn{display:inline-block;background:var(--berry);color:var(--berry-ink);font-weight:700;text-decoration:none;border:0;border-radius:12px;padding:12px 20px;font:inherit;font-weight:700;cursor:pointer}
+.btn:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--pistachio);outline-offset:2px}
+.hero{background:var(--cream)}
+.hero .in{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding-block:56px}
+.eyebrow{font-size:13px;letter-spacing:.06em;color:var(--berry);font-weight:700}
+.hero h1{font-size:clamp(34px,5vw,54px);margin:10px 0 16px;color:var(--cocoa)}
+.hero p{color:var(--muted);max-width:46ch;margin:0 0 24px}
+.facts{display:flex;gap:28px;flex-wrap:wrap;margin-top:28px}
+.facts b{display:block;font-family:var(--display);font-size:26px;color:var(--cocoa)}
+.facts span{font-size:14px;color:var(--muted)}
+.builder{background:var(--surface);border-radius:22px;padding:24px;box-shadow:0 18px 40px rgba(90,45,34,.12);display:grid;gap:14px}
+.builder h3{font-size:22px}
+.cake{height:150px;border-radius:16px;background:var(--cream);display:grid;place-items:center}
+label{font-size:13px;font-weight:700;color:var(--muted);display:grid;gap:6px}
+select,input{font:inherit;padding:11px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.total{display:flex;justify-content:space-between;align-items:center;border-top:1px dashed var(--line);padding-top:12px}
+.total b{font-size:24px;font-variant-numeric:tabular-nums;color:var(--berry)}
+.done{background:var(--cream);border-radius:12px;padding:12px;font-weight:500}
+section{padding-block:64px}
+.head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.head h2{font-size:34px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips button{font:inherit;font-size:14px;font-weight:500;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--cocoa);border-color:var(--cocoa);color:var(--bg)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.item{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.item svg{display:block;width:100%;height:150px;background:var(--cream)}
+.item .b{padding:14px 16px 16px;display:flex;flex-direction:column;gap:4px;flex:1}
+.item h3{font-size:18px}
+.item small{color:var(--muted)}
+.item .p{margin-top:auto;padding-top:10px;display:flex;justify-content:space-between;align-items:center}
+.item .p b{font-variant-numeric:tabular-nums}
+.add{width:36px;height:36px;border-radius:50%;border:0;background:var(--berry);color:var(--berry-ink);font-size:20px;font-weight:700;cursor:pointer}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;counter-reset:s}
+.steps div{border-top:3px solid var(--berry);padding-top:16px}
+.steps div::before{counter-increment:s;content:counter(s);font-family:var(--display);font-size:40px;color:var(--berry);display:block;line-height:1}
+.steps h3{font-size:20px;margin:8px 0 6px}
+.steps p{color:var(--muted);margin:0}
+.contact{background:var(--cocoa);color:var(--bg)}
+.contact .in{display:grid;grid-template-columns:1fr 1fr;gap:32px;padding-block:48px}
+.contact h2{font-size:32px;color:var(--bg)}
+.contact dl{display:grid;grid-template-columns:auto 1fr;gap:10px 18px;margin:0}
+.contact dt{opacity:.7}
+.contact dd{margin:0;font-weight:500}
+footer .in{padding-block:22px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media (max-width:820px){
+ nav{display:none}
+ .hero .in,.contact .in{grid-template-columns:1fr}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .item svg{height:110px}
+ .steps{grid-template-columns:1fr}
+ section{padding-block:44px}
+}
+@media (prefers-reduced-motion:no-preference){.item{transition:transform .2s}.item:hover{transform:translateY(-3px)}}
+</style>
+</head>
+<body>
+
+<header><div class="in">
+ <a class="logo" href="#">Torte.yvn</a>
+ <nav><a href="#menu">Տեսականի</a><a href="#how">Ինչպես պատվիրել</a><a href="#contact">Կոնտակտներ</a></nav>
+ <a class="btn" href="#order">Պատվիրել տորթ</a>
+</div></header>
+
+<div class="hero"><div class="in">
+ <div>
+  <div class="eyebrow">ՏՈՐԹԵՐ ՊԱՏՎԵՐՈՎ · ԵՐԵՎԱՆ</div>
+  <h1>Տորթեր, որոնք թխում ենք Ձեր տոնի օրը</h1>
+  <p>Ընտրեք համը, չափն ու մակագրությունը կայքում, և մենք կպատրաստենք տորթը պատվիրած օրվա առավոտյան։ Առաքում Երևանի ողջ տարածքում։</p>
+  <a class="btn" href="#menu">Դիտել տեսականին</a>
+  <div class="facts">
+   <div><b>24 ժամ</b><span>նվազագույն պատվերի ժամկետ</span></div>
+   <div><b>1–5 կգ</b><span>տորթի քաշը</span></div>
+   <div><b>12</b><span>համի տարբերակ</span></div>
+  </div>
+ </div>
+ <form class="builder" id="order" aria-label="Տորթի պատվեր">
+  <h3>Հավաքեք Ձեր տորթը</h3>
+  <div class="cake" aria-hidden="true">
+   <svg viewBox="0 0 200 120" width="190" height="115"><ellipse cx="100" cy="108" rx="82" ry="8" fill="#000" opacity=".08"/><rect x="30" y="60" width="140" height="44" rx="10" fill="#7a3b2e"/><rect x="45" y="28" width="110" height="36" rx="9" fill="#f7c9d6"/><path d="M45 40 q14 12 27 0 t27 0 t27 0 t28 0 v-6 a9 9 0 0 0-9-6 h-92 a9 9 0 0 0-8 6z" fill="#b8326a"/><circle cx="70" cy="22" r="7" fill="#c8102e"/><circle cx="100" cy="18" r="7" fill="#c8102e"/><circle cx="130" cy="22" r="7" fill="#c8102e"/><rect x="30" y="78" width="140" height="6" fill="#f7c9d6"/></svg>
+  </div>
+  <label for="flav">Համը
+   <select id="flav"><option value="9000">Նապոլեոն</option><option value="10500" selected>Ելակ և մասկարպոնե</option><option value="11000">Շոկոլադ և կեռաս</option><option value="10000">Մեղրով «Մեդովիկ»</option><option value="12000">Պիստակ և ազնվամորի</option></select>
+  </label>
+  <div class="row2">
+   <label for="kg">Քաշը
+    <select id="kg"><option value="1">1 կգ</option><option value="1.5">1.5 կգ</option><option value="2" selected>2 կգ</option><option value="3">3 կգ</option></select>
+   </label>
+   <label for="day">Օրը
+    <input id="day" type="date" value="2026-11-14">
+   </label>
+  </div>
+  <label for="txt">Մակագրություն
+   <input id="txt" value="Շնորհավոր, Անի" maxlength="30">
+  </label>
+  <div class="total"><span>Ընդամենը</span><b id="sum">21 000 ֏</b></div>
+  <button class="btn" type="submit">Ձևակերպել պատվերը</button>
+  <div class="done" id="done" hidden>Պատվերն ընդունված է։ Կզանգենք 15 րոպեի ընթացքում հաստատելու համար։</div>
+ </form>
+</div></div>
+
+<section id="menu"><div class="in">
+ <div class="head"><h2>Տեսականի</h2>
+  <div class="chips" role="group" aria-label="Կատեգորիա">
+   <button aria-pressed="true" data-c="all">Բոլորը</button><button aria-pressed="false" data-c="cake">Տորթեր</button><button aria-pressed="false" data-c="small">Փոքր դեսերտներ</button>
+  </div>
+ </div>
+ <div class="grid" id="grid"></div>
+</div></section>
+
+<section id="how" style="padding-top:0"><div class="in">
+ <div class="head"><h2>Ինչպես պատվիրել</h2></div>
+ <div class="steps">
+  <div><h3>Ընտրեք տորթը</h3><p>Համը, քաշը և մակագրությունը։ Գինը հաշվվում է անմիջապես։</p></div>
+  <div><h3>Հաստատեք զանգով</h3><p>15 րոպեի ընթացքում կզանգենք և կճշտենք մանրամասները։</p></div>
+  <div><h3>Ստացեք տոնի օրը</h3><p>Վերցրեք սրահից կամ պատվիրեք առաքում Ձեր հասցեով։</p></div>
+ </div>
+</div></section>
+
+<div class="contact" id="contact"><div class="in">
+ <div><h2>Այցելեք մեզ</h2><p style="opacity:.8;margin:12px 0 0">Պատվիրեք տորթը առնվազն 24 ժամ առաջ։</p></div>
+ <dl>
+  <dt>Հասցե</dt><dd>Երևան</dd>
+  <dt>Ժամեր</dt><dd>Ամեն օր 10:00–21:00</dd>
+  <dt>Հեռախոս</dt><dd>+374 XX XX XX XX</dd>
+  <dt>Instagram</dt><dd>@torte.yvn</dd>
+ </dl>
+</div></div>
+
+<footer><div class="in"><span>© Torte.yvn · Դեմո տարբերակ</span><span>Կայքը՝ Վահան Արուբջանյան</span></div></footer>
+
+<script>
+const items=[
+ {n:"Նապոլեոն",d:"Դասական, 1 կգ",p:9000,c:"cake",col:"#f3d9a4",top:"#fff3d6"},
+ {n:"Ելակ և մասկարպոնե",d:"1 կգ",p:10500,c:"cake",col:"#f7c9d6",top:"#d63d6b"},
+ {n:"Շոկոլադ և կեռաս",d:"1 կգ",p:11000,c:"cake",col:"#6b3a2c",top:"#9e1b32"},
+ {n:"Պիստակ և ազնվամորի",d:"1 կգ",p:12000,c:"cake",col:"#c9dca5",top:"#c2185b"},
+ {n:"Էկլեր",d:"վանիլային կրեմով, 1 հատ",p:600,c:"small",col:"#e8c08a",top:"#5a2d22"},
+ {n:"Մակարուն",d:"6 հատ, տարբեր համեր",p:2400,c:"small",col:"#f3b6c8",top:"#b7d68a"},
+ {n:"Կարտոշկա",d:"շոկոլադե, 1 հատ",p:450,c:"small",col:"#7a4a38",top:"#f2e2d0"},
+ {n:"Չիզքեյք",d:"Նյու Յորք, կտոր",p:1500,c:"small",col:"#f6e7c8",top:"#c8102e"}];
+const fmt=v=>v.toLocaleString("ru-RU").replace(/ /g," ")+" ֏";
+function art(i){return i.c==="cake"
+ ?`<svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><ellipse cx="100" cy="104" rx="70" ry="7" fill="#000" opacity=".08"/><rect x="40" y="50" width="120" height="50" rx="10" fill="${i.col}"/><path d="M40 62 q15 12 30 0 t30 0 t30 0 t30 0 v-4 a10 10 0 0 0-10-8 h-100 a10 10 0 0 0-10 8z" fill="${i.top}"/><rect x="40" y="76" width="120" height="5" fill="#fff" opacity=".5"/></svg>`
+ :`<svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><ellipse cx="100" cy="100" rx="56" ry="7" fill="#000" opacity=".08"/><rect x="62" y="52" width="76" height="44" rx="20" fill="${i.col}"/><rect x="62" y="44" width="76" height="20" rx="10" fill="${i.top}"/></svg>`}
+function draw(c){document.getElementById("grid").innerHTML=items.filter(i=>c==="all"||i.c===c).map(i=>`<div class="item">${art(i)}<div class="b"><h3>${i.n}</h3><small>${i.d}</small><div class="p"><b>${fmt(i.p)}</b><button class="add" aria-label="Ավելացնել ${i.n}">+</button></div></div></div>`).join("")}
+draw("all");
+document.querySelectorAll(".chips button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".chips button").forEach(x=>x.setAttribute("aria-pressed",x===b));draw(b.dataset.c)});
+const f=document.getElementById("order");
+function calc(){document.getElementById("sum").textContent=fmt(Math.round(+flav.value*+kg.value))}
+f.addEventListener("input",calc);calc();
+f.addEventListener("submit",e=>{e.preventDefault();document.getElementById("done").hidden=false});
+</script>
+
+</body>
+</html>
